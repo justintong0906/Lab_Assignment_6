@@ -1,8 +1,40 @@
 #include <stdio.h>
 
-int search(int numbers[], int low, int high, int value) 
+int search(int numbers[], int low, int high, int value)
 {
-	return -1;
+    if(numbers == NULL){ //checks array existence
+        printf("Array is empty!");
+        return -1;
+    }
+	int middle = (low+high)/2; //establishes a middle (value between low and high)
+
+
+
+	if(value == numbers[middle]) //if the target value so happens to be right in the middle, it is returned
+        return middle;
+
+    if(low+1 == high){ //if low and high end up next to each other, check each number individually
+        if(value == low){
+            while(numbers[low-1]==numbers[low] ) //if there are repeats, this will ensure the index of the FIRST occurance is printed
+                low--;
+            return low;
+        }
+
+        else if(value == high){
+            while(numbers[high-1]==numbers[high] ) //if there are repeats, this will ensure the index of the FIRST occurance is printed
+                high--;
+            return high;
+        }
+        else
+            return -1;
+    }
+
+    if(value < numbers[middle]) //if the middle is higher than the value, recurse in the lower half of the current dataset
+        return search(numbers,low,middle,value);
+
+    if(value > numbers[middle])
+        return search(numbers,middle,high,value);//if the middle is lower than the value, recurse in the upper half of the current dataset
+
 }
 
 void printArray(int numbers[], int sz)
@@ -28,7 +60,7 @@ int main(void)
 	FILE* inFile = fopen("input.txt","r");
 
 	fscanf(inFile, " %d\n", &numInputs);
-	
+
 	while (numInputs-- > 0)
 	{
 		fscanf(inFile, " %d\n", &countOfNums);
